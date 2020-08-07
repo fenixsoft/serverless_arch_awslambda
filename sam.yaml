@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Spring Boot 2 API - com.github.fenixsoft::bookstore-serverless-awslambda
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+
+Resources:
+  BookstoreServerlessAwslambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.github.fenixsoft.StreamLambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri: target/bookstore-serverless-awslambda-1.0-SNAPSHOT-lambda-package.zip
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 30
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+
+Outputs:
+  BookstoreServerlessAwslambdaApi:
+    Description: URL for application
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+    Export:
+      Name: BookstoreServerlessAwslambdaApi

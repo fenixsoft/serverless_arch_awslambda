@@ -1,0 +1,17 @@
+service: spring-boot-serverless
+
+provider:
+  name: aws
+  runtime: java8
+
+package:
+  artifact: target/bookstore-serverless-awslambda-1.0-SNAPSHOT-lambda-package.zip
+
+functions:
+  springBootServerless:
+    handler: com.github.fenixsoft.StreamLambdaHandler::handleRequest
+    events:
+      - http:
+          path: /
+          method: get
+    timeout: 30
